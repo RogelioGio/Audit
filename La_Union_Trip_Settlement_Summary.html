@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>La Union Trip — Settlement Summary</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Space+Mono:wght@400;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cream:#F7F2E9;
+    --paper:#FFFDF9;
+    --ink:#22303C;
+    --navy:#173247;
+    --navy-2:#0F2434;
+    --gold:#B9862F;
+    --gold-soft:#F1E3C6;
+    --green:#2F7D5A;
+    --green-soft:#E4F1EA;
+    --red:#B3452F;
+    --red-soft:#F7E7E1;
+    --line:#DDD3BF;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--cream);
+    color:var(--ink);
+    font-family:'Inter', sans-serif;
+    line-height:1.55;
+    padding:0 0 80px 0;
+  }
+  .wrap{max-width:880px;margin:0 auto;padding:0 24px;}
+
+  /* Header / hero */
+  .hero{
+    background:linear-gradient(160deg, var(--navy) 0%, var(--navy-2) 100%);
+    color:#F4EFE4;
+    padding:56px 24px 44px;
+    position:relative;
+    overflow:hidden;
+  }
+  .hero::after{
+    content:"";
+    position:absolute;
+    right:-60px; top:-60px;
+    width:260px;height:260px;
+    border:1px solid rgba(244,239,228,0.12);
+    border-radius:50%;
+  }
+  .hero::before{
+    content:"";
+    position:absolute;
+    right:20px; top:40px;
+    width:160px;height:160px;
+    border:1px solid rgba(244,239,228,0.10);
+    border-radius:50%;
+  }
+  .hero-inner{max-width:880px;margin:0 auto;position:relative;z-index:1;}
+  .eyebrow{
+    font-family:'Space Mono', monospace;
+    font-size:12.5px;
+    letter-spacing:0.14em;
+    text-transform:uppercase;
+    color:var(--gold);
+    margin:0 0 14px;
+  }
+  .hero h1{
+    font-family:'Fraunces', serif;
+    font-weight:600;
+    font-size:clamp(32px, 5vw, 48px);
+    margin:0 0 8px;
+    letter-spacing:-0.01em;
+  }
+  .hero p.sub{
+    font-size:16px;
+    color:#C9D3D9;
+    margin:0 0 22px;
+    max-width:560px;
+  }
+  .hero-meta{
+    display:flex; flex-wrap:wrap; gap:10px;
+    font-family:'Space Mono', monospace;
+    font-size:12.5px;
+  }
+  .hero-meta span{
+    border:1px solid rgba(244,239,228,0.28);
+    padding:6px 12px;
+    border-radius:100px;
+    color:#E9E2D2;
+  }
+
+  /* Section styling */
+  section{padding:44px 0;border-bottom:1px solid var(--line);}
+  section:last-child{border-bottom:none;}
+  .section-num{
+    font-family:'Space Mono', monospace;
+    color:var(--gold);
+    font-size:13px;
+    letter-spacing:0.08em;
+  }
+  h2{
+    font-family:'Fraunces', serif;
+    font-size:26px;
+    font-weight:600;
+    margin:4px 0 16px;
+    color:var(--navy);
+  }
+  p{margin:0 0 14px; font-size:15.5px;}
+  ul{margin:0 0 14px; padding-left:22px;}
+  li{margin-bottom:8px; font-size:15.5px;}
+
+  .callout{
+    background:var(--paper);
+    border:1px solid var(--line);
+    border-left:4px solid var(--gold);
+    border-radius:6px;
+    padding:16px 18px;
+    margin:16px 0;
+    font-size:14.5px;
+  }
+  .callout.warn{border-left-color:var(--red); background:var(--red-soft);}
+  .callout.warn strong{color:var(--red);}
+  .callout strong{color:var(--gold);}
+
+  /* Tables */
+  table{width:100%; border-collapse:collapse; margin:18px 0; background:var(--paper); border-radius:8px; overflow:hidden; box-shadow:0 1px 3px rgba(15,36,52,0.06);}
+  thead th{
+    background:var(--navy);
+    color:#F4EFE4;
+    font-family:'Space Mono', monospace;
+    font-weight:400;
+    font-size:12.5px;
+    letter-spacing:0.06em;
+    text-transform:uppercase;
+    text-align:left;
+    padding:12px 14px;
+  }
+  tbody td{
+    padding:11px 14px;
+    border-bottom:1px solid var(--line);
+    font-size:14.5px;
+  }
+  tbody tr:last-child td{border-bottom:none;}
+  tbody tr:nth-child(even){background:#FBF8F1;}
+  td.num, th.num{text-align:right; font-family:'Space Mono', monospace;}
+  td.name{font-weight:600; color:var(--navy);}
+  .pos{color:var(--green); font-weight:700;}
+  .neg{color:var(--red); font-weight:700;}
+  .total-row td{font-weight:700; background:var(--gold-soft) !important; border-top:2px solid var(--gold);}
+
+  /* Settlement flow diagram */
+  .flow{
+    display:flex; flex-direction:column; gap:10px;
+    margin:22px 0;
+  }
+  .flow-item{
+    display:grid;
+    grid-template-columns:28px 1fr auto 1fr;
+    align-items:center;
+    gap:10px;
+    background:var(--paper);
+    border:1px solid var(--line);
+    border-radius:8px;
+    padding:14px 16px;
+  }
+  .flow-step{
+    font-family:'Space Mono', monospace;
+    font-size:12px;
+    color:#fff;
+    background:var(--navy);
+    width:26px; height:26px;
+    border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .flow-person{
+    font-weight:700; color:var(--navy);
+    display:flex; flex-direction:column;
+  }
+  .flow-person.from{text-align:left;}
+  .flow-person.to{text-align:right;}
+  .flow-amt{
+    font-family:'Space Mono', monospace;
+    font-weight:700;
+    font-size:16px;
+    color:var(--gold);
+    white-space:nowrap;
+    text-align:center;
+  }
+  .flow-arrow{font-size:20px; color:var(--gold);}
+  .flow-reason{
+    grid-column:1 / -1;
+    font-size:13.5px;
+    color:#5B6B76;
+    padding-top:6px;
+    border-top:1px dashed var(--line);
+    margin-top:6px;
+  }
+  .flow-total{
+    text-align:center;
+    font-family:'Space Mono', monospace;
+    font-weight:700;
+    color:var(--navy);
+    margin-top:6px;
+    font-size:15px;
+  }
+
+  footer{
+    text-align:center;
+    padding:36px 24px 0;
+    font-size:13px;
+    color:#8A7E68;
+    font-family:'Space Mono', monospace;
+  }
+
+  @media (max-width:600px){
+    .flow-item{grid-template-columns:1fr; text-align:left;}
+    .flow-person.to{text-align:left;}
+    .flow-arrow{transform:rotate(90deg); justify-self:start;}
+    thead{display:none;}
+    table, tbody, tr, td{display:block; width:100%;}
+    tbody tr{border-bottom:2px solid var(--line); padding:10px 0;}
+    tbody td{border:none; padding:4px 14px; display:flex; justify-content:space-between;}
+    tbody td::before{content:attr(data-label); font-weight:600; color:#8A7E68; margin-right:12px;}
+    td.num{text-align:right;}
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-inner">
+    <p class="eyebrow">Trip Ledger &nbsp;·&nbsp; Group Expense Audit</p>
+    <h1>3-Day La Union Trip</h1>
+    <p class="sub">Expense audit and final settlement plan — who owes what, why, and how it gets squared with the fewest possible payments.</p>
+    <div class="hero-meta">
+      <span>July 10–13</span>
+      <span>6 travelers</span>
+      <span>₱16,174.81 total spend</span>
+      <span>5 payments to settle</span>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <section>
+    <p class="section-num">01</p>
+    <h2>Purpose</h2>
+    <p>This audit reconciles all six people's tabs — the master "all" sheet plus the four individual payer tabs (Rica, Juls, Gio, and Richard) — into a single, minimal set of payments that settles everyone up. Instead of everyone chasing everyone else, each person makes at most one or two payments and the group is even.</p>
+  </section>
+
+  <section>
+    <p class="section-num">02</p>
+    <h2>How the numbers were derived</h2>
+    <ul>
+      <li>Each of the four payer tabs (Rica, Juls, Gio, Richard) lists the items that person fronted ("Nag Abono") and a breakdown of how each item's cost was split among the group.</li>
+      <li>For each tab, every other person's column total is the amount they owe that payer. The payer's own column is their personal share — not a debt to anyone.</li>
+      <li>Adding up what each person owes across all four tabs, and what each payer is owed in total, gives everyone a single net position: positive means the group owes them money, negative means they still owe the group.</li>
+      <li>The settlement plan matches the largest debtors to the largest creditors first, so debts cancel out in as few transactions as possible.</li>
+    </ul>
+  </section>
+
+  <section>
+    <p class="section-num">03</p>
+    <h2>Data issues found during the audit</h2>
+    <p>Two real gaps on the Juls tab were caught and corrected before finalizing:</p>
+    <div class="callout">
+      <strong>Flotsam (₱925) was never split.</strong> The description row says it should be divided 6 ways (₱154.17 each), but the breakdown row was left completely blank. It's added back into every total below — it's a real, documented cost.
+    </div>
+    <div class="callout">
+      <strong>The tab's own "Total" row doesn't match its line items.</strong> After Top Load and Tourguide were added, the total formula wasn't updated consistently across columns — only Rica's total reflected the new rows. The figures below were recomputed directly from line items and cross-checked against total trip spend.
+    </div>
+    <div class="callout warn">
+      <strong>Still open:</strong> "Coffee" and "Kaha" on the Juls tab have no peso amount recorded, so they're excluded from every total below. Rica's own tab also has a small, unexplained ₱77 gap between its line items and its stated total — worth a quick check, though it won't meaningfully change the settlement plan.
+    </div>
+  </section>
+
+  <section>
+    <p class="section-num">04</p>
+    <h2>What each person actually spent</h2>
+    <p>Each person's fair share of total trip costs — food, transport, activities, everything — regardless of who paid upfront. This answers "how much did this trip cost me," not "what do I still owe."</p>
+    <table>
+      <thead><tr><th>Person</th><th class="num">Total Spent (₱)</th></tr></thead>
+      <tbody>
+        <tr><td class="name" data-label="Person">Juls</td><td class="num" data-label="Spent">3,010.47</td></tr>
+        <tr><td class="name" data-label="Person">Gio</td><td class="num" data-label="Spent">2,934.13</td></tr>
+        <tr><td class="name" data-label="Person">Honey</td><td class="num" data-label="Spent">2,741.13</td></tr>
+        <tr><td class="name" data-label="Person">Jorge</td><td class="num" data-label="Spent">2,692.14</td></tr>
+        <tr><td class="name" data-label="Person">Richard</td><td class="num" data-label="Spent">2,405.14</td></tr>
+        <tr><td class="name" data-label="Person">Rica</td><td class="num" data-label="Spent">2,391.80</td></tr>
+        <tr class="total-row"><td data-label="Total">Total trip cost</td><td class="num" data-label="Total">16,174.81</td></tr>
+      </tbody>
+    </table>
+    <p style="font-size:13.5px; color:#5B6B76;">This is each person's column, summed across all four payer tabs, including their self-share on the tab where they were the payer. It checks out almost exactly against the sum of all four tabs' grand totals (₱16,174.83 — the 2-centavo gap is just rounding across tabs).</p>
+  </section>
+
+  <section>
+    <p class="section-num">05</p>
+    <h2>Net position — who's owed, who owes</h2>
+    <table>
+      <thead><tr><th>Person</th><th class="num">Owed by Them</th><th class="num">Owed to Them</th><th class="num">Net</th></tr></thead>
+      <tbody>
+        <tr><td class="name" data-label="Person">Juls</td><td class="num" data-label="Owed by">1,660.32</td><td class="num" data-label="Owed to">5,957.76</td><td class="num pos" data-label="Net">+4,297.44</td></tr>
+        <tr><td class="name" data-label="Person">Rica</td><td class="num" data-label="Owed by">1,640.48</td><td class="num" data-label="Owed to">4,685.62</td><td class="num pos" data-label="Net">+3,045.14</td></tr>
+        <tr><td class="name" data-label="Person">Richard</td><td class="num" data-label="Owed by">2,158.81</td><td class="num" data-label="Owed to">1,596.65</td><td class="num neg" data-label="Net">−562.16</td></tr>
+        <tr><td class="name" data-label="Person">Gio</td><td class="num" data-label="Owed by">2,651.80</td><td class="num" data-label="Owed to">1,305.65</td><td class="num neg" data-label="Net">−1,346.15</td></tr>
+        <tr><td class="name" data-label="Person">Jorge</td><td class="num" data-label="Owed by">2,692.14</td><td class="num" data-label="Owed to">0.00</td><td class="num neg" data-label="Net">−2,692.14</td></tr>
+        <tr><td class="name" data-label="Person">Honey</td><td class="num" data-label="Owed by">2,741.13</td><td class="num" data-label="Owed to">0.00</td><td class="num neg" data-label="Net">−2,741.13</td></tr>
+      </tbody>
+    </table>
+    <p style="font-size:13.5px; color:#5B6B76;">Jorge and Honey never fronted any expenses — they never appear as "Nag Abono" on the master sheet — so they only owe, they never collect.</p>
+  </section>
+
+  <section>
+    <p class="section-num">06</p>
+    <h2>Recommended settlement plan</h2>
+    <p>Instead of 15+ separate reimbursements between pairs of people, the debts net down to <strong>5 payments</strong>. Each is sized to fully clear either the payer's remaining debt or the receiver's remaining credit.</p>
+
+    <div class="flow">
+      <div class="flow-item">
+        <div class="flow-step">1</div>
+        <div class="flow-person from">Honey</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-person to">Juls</div>
+        <div class="flow-amt" style="grid-column:1/-1; text-align:center; margin-top:-4px;">₱2,741.13</div>
+        <div class="flow-reason">Clears all of Honey's debt — the full amount she owes across all tabs, directed to the person still owed the most.</div>
+      </div>
+      <div class="flow-item">
+        <div class="flow-step">2</div>
+        <div class="flow-person from">Jorge</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-person to">Juls</div>
+        <div class="flow-amt" style="grid-column:1/-1; text-align:center; margin-top:-4px;">₱1,556.31</div>
+        <div class="flow-reason">Finishes off what Jorge owes Juls after Honey's payment fully covers her — this is the remainder of Juls's outstanding balance.</div>
+      </div>
+      <div class="flow-item">
+        <div class="flow-step">3</div>
+        <div class="flow-person from">Jorge</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-person to">Rica</div>
+        <div class="flow-amt" style="grid-column:1/-1; text-align:center; margin-top:-4px;">₱1,135.83</div>
+        <div class="flow-reason">Jorge's remaining debt (₱2,692.14 total − ₱1,556.31 already paid to Juls) is redirected to Rica, the next-largest creditor.</div>
+      </div>
+      <div class="flow-item">
+        <div class="flow-step">4</div>
+        <div class="flow-person from">Gio</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-person to">Rica</div>
+        <div class="flow-amt" style="grid-column:1/-1; text-align:center; margin-top:-4px;">₱1,346.15</div>
+        <div class="flow-reason">Clears all of Gio's debt in one payment, continuing to pay down what the group owes Rica.</div>
+      </div>
+      <div class="flow-item">
+        <div class="flow-step">5</div>
+        <div class="flow-person from">Richard</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-person to">Rica</div>
+        <div class="flow-amt" style="grid-column:1/-1; text-align:center; margin-top:-4px;">₱562.16</div>
+        <div class="flow-reason">Clears Richard's remaining net balance and fully settles what's owed to Rica.</div>
+      </div>
+    </div>
+    <p class="flow-total">Total moved: ₱6,341.58</p>
+
+    <div class="callout" style="margin-top:20px;">
+      <strong>Why this is the minimum:</strong> with 4 people owing money (Honey, Jorge, Gio, Richard) and 2 people owed money (Juls, Rica), the fewest possible transactions to settle everyone is (debtors + creditors − 1) = 5 — exactly what's listed above. No further reduction is mathematically possible without a payment that doesn't correspond to a real debt.
+    </div>
+  </section>
+
+  <section>
+    <p class="section-num">07</p>
+    <h2>Before you settle up</h2>
+    <ul>
+      <li>Confirm the Coffee and Kaha amounts with whoever remembers, and re-run the numbers if they're non-trivial — they're currently excluded entirely.</li>
+      <li>Double-check the ~₱77 gap on Rica's own tab so her totals are fully verified.</li>
+      <li>Once confirmed, the sheet's Flotsam row and Total formulas should be corrected so future totals pull correctly without manual reconciliation.</li>
+    </ul>
+  </section>
+
+</div>
+
+<footer>Prepared from "[Audit] 3-Day La Union Trip (July 10 – 13)"</footer>
+
+</body>
+</html>
